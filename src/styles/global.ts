@@ -24,9 +24,13 @@ const GlobalStyle = createGlobalStyle`
   background-color: transparent;
   }
 
-	list {
+	li {
 		list-style: none;
 	}
+
+  main {
+    margin-top: 7.2rem;
+  }
 
 `;
 
