@@ -32,10 +32,8 @@ body {
 
 	input:focus {
 		outline: 1px solid #7551F6;
-		border: 
+		border:  1px solid #7551F6;
 	}
-
-
 `;
 
 export default GlobalStyle;
