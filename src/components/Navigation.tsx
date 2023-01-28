@@ -30,6 +30,8 @@ const Container = styled.nav`
 	padding: 2rem 0;
 	width: 100vw;
 
+	background-color: white;
+
 	ul {
 		display: flex;
 		justify-content: space-between;
