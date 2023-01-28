@@ -1,17 +1,19 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0; 
-  }
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
 
-  html,
-  body {
-    box-sizing: border-box;
-    border: 0;
-    font-size: 62.5%; 
-  }
+html,
+body {
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-size: 62.5%;
+}
 
   a {
 	color: inherit;
@@ -24,13 +26,15 @@ const GlobalStyle = createGlobalStyle`
   background-color: transparent;
   }
 
-	li {
-		list-style: none;
+	ul,ol,li{
+		list-style : none;
 	}
 
-  main {
-    margin-top: 7.2rem;
-  }
+	input:focus {
+		outline: 1px solid #7551F6;
+		border: 
+	}
+
 
 `;
 
