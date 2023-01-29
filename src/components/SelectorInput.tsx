@@ -111,6 +111,10 @@ const Container = styled.div`
 	position: relative;
 	width: 15rem;
 	height: 5rem;
+
+	@media screen and (max-width: 500px) {
+		width: 13rem;
+	}
 `;
 
 const SelectorInputBox = styled.div`

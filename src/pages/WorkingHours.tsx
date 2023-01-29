@@ -223,6 +223,10 @@ const FlexBox = styled.div`
 	align-items: center;
 	width: 38rem;
 	column-gap: 1rem;
+
+	@media screen and (max-width: 500px) {
+		width: 100%;
+	}
 `;
 
 const FlexColumnBox = styled(FlexBox)`
@@ -248,6 +252,10 @@ const WeekBox = styled.div`
 	svg {
 		font-size: 1.8rem;
 		cursor: pointer;
+	}
+
+	@media screen and (max-width: 500px) {
+		flex-direction: column;
 	}
 `;
 
@@ -282,6 +290,10 @@ const Button = styled.button<{ props: string }>`
 
 const PlusIconBox = styled.div`
 	width: 38rem;
+
+	@media screen and (max-width: 500px) {
+		width: 100%;
+	}
 `;
 
 const IconBox = styled.div`
