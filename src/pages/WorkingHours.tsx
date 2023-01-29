@@ -1,7 +1,14 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { hourChange, hourState, temporaryHourState } from "../atoms/hours";
+
+// recoil
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+	hourChange,
+	hourState,
+	isTemporaryHourValidState,
+	temporaryHourState,
+} from "../atoms/hours";
 
 // components
 import RangeInput from "../components/RangeInput";
@@ -12,28 +19,35 @@ import { GoPlus } from "react-icons/go";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 const WorkingHours = () => {
-	const [sectionCollapse, setSectionCollapse] = useState(false);
 	const [rangeInputList, setRangeInputList] = useRecoilState(hourState);
 	const [isHourChanged, setIsHourChanged] = useRecoilState(hourChange);
-	const temporaryHours = useRecoilValue(temporaryHourState);
-	const setTemporaryHours = useSetRecoilState(temporaryHourState);
+	const [temporaryHours, setTemporaryHours] =
+		useRecoilState(temporaryHourState);
+	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
+
+	const [sectionCollapse, setSectionCollapse] = useState(false);
+
+	useEffect(() => {
+		setTemporaryHours(rangeInputList);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [rangeInputList]);
 
 	/**
-	 * range input을 추가합니다.
+	 * Range Input을 추가합니다.
 	 * @param e
 	 */
-	const handleAddRangeInput = (e: any) => {
-		if (!e.target.id) return;
+	const handleAddRangeInput = (e: React.MouseEvent<HTMLDivElement>) => {
+		if (!e.currentTarget.id) return;
 
-		const id = e.target.id.split("-")[0];
-		const name = e.target.id.split("-")[1];
+		const id = e.currentTarget.id.split("-")[0];
+		const name = e.currentTarget.id.split("-")[1];
 
-		const targetObjIdx = rangeInputList.findIndex(
+		const targetObjIdx = temporaryHours.findIndex(
 			(item: any) => item.id === id
 		);
-		let newArray = [...rangeInputList];
+		let newArray = [...temporaryHours];
 		const newList = [
-			...rangeInputList[targetObjIdx]?.list,
+			...temporaryHours[targetObjIdx]?.list,
 			{ start: "9:00", end: "17:00" },
 		];
 
@@ -43,30 +57,29 @@ const WorkingHours = () => {
 			list: newList,
 		};
 		setTemporaryHours([...newArray]);
-		setRangeInputList([...newArray]);
 		setIsHourChanged(true);
 	};
 
 	/**
-	 *  range input을 삭제합니다.
+	 * Range Input을 삭제합니다.
 	 * @param e
 	 */
-	const handleDeleteRangeInput = (e: any) => {
-		if (!e.target.id) return;
+	const handleDeleteRangeInput = (e: React.MouseEvent<HTMLDivElement>) => {
+		if (!e.currentTarget.id) return;
 
-		const id = e.target.id.split("-")[0];
-		const name = e.target.id.split("-")[1];
+		const id = e.currentTarget.id.split("-")[0];
+		const name = e.currentTarget.id.split("-")[1];
 
-		const targetObjIdx = rangeInputList.findIndex(
+		const targetObjIdx = temporaryHours.findIndex(
 			(item: any) => item.id === id
 		);
-		const targetIdx = e.target.tabIndex;
+		const targetIdx = e.currentTarget.tabIndex;
 
-		let newArray = [...rangeInputList];
+		let newArray = [...temporaryHours];
 
 		const newList = [
-			...rangeInputList[targetObjIdx].list.slice(0, targetIdx),
-			...rangeInputList[targetObjIdx].list.slice(targetIdx + 1),
+			...temporaryHours[targetObjIdx].list.slice(0, targetIdx),
+			...temporaryHours[targetObjIdx].list.slice(targetIdx + 1),
 		];
 
 		newArray[targetObjIdx] = {
@@ -76,7 +89,6 @@ const WorkingHours = () => {
 		};
 
 		setTemporaryHours([...newArray]);
-		setRangeInputList([...newArray]);
 		setIsHourChanged(true);
 	};
 
@@ -105,11 +117,9 @@ const WorkingHours = () => {
 			</SectionCollapse>
 
 			{/* rangeInputList */}
-			{sectionCollapse ? (
-				<div></div>
-			) : (
+			{!sectionCollapse && (
 				<>
-					{rangeInputList.map((week: any) => {
+					{temporaryHours.map((week: any) => {
 						return (
 							<RangeInputBox key={week.id}>
 								<WeekBox id={week.id}>
@@ -173,7 +183,11 @@ const WorkingHours = () => {
 							>
 								Cancel
 							</Button>
-							<Button props="main" onClick={handleUpdate}>
+							<Button
+								disabled={!isTemporaryHourValid}
+								props={!isTemporaryHourValid ? "error" : "main"}
+								onClick={handleUpdate}
+							>
 								Update
 							</Button>
 						</ButtonBox>
@@ -226,6 +240,7 @@ const WeekBox = styled.div`
 	min-height: 5rem;
 	max-height: 100vh;
 	padding: 1rem 2rem;
+
 	label {
 		font-size: 1.8rem;
 	}
@@ -260,7 +275,9 @@ const Button = styled.button<{ props: string }>`
 	${(props) =>
 		props.props === "main"
 			? `color: white; background-color: ${props.theme.colors.primary};`
-			: `color:  ${props.theme.colors.primary}; background-color: white;`}
+			: props.props === "sencond"
+			? `color:  ${props.theme.colors.primary}; background-color: white;`
+			: `color: white; background-color: lightgray; cursor: unset;`}
 `;
 
 const PlusIconBox = styled.div`

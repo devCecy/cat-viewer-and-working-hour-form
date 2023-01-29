@@ -1,39 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { hours } from "../data/hours";
-import { hourChange, hourState, temporaryHourState } from "../atoms/hours";
+
+// recoil
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+	currentInputState,
+	hourChange,
+	temporaryHourState,
+} from "../atoms/hours";
+
+// library
 import { IoMdArrowDropdown } from "react-icons/io";
 
-const SelectorInput = ({ hour, info, position }: any) => {
-	const [isInputSelected, setIsInputSelected] = useState(false);
+interface SelectorInputProps {
+	hour: string;
+	info: [string, number, string];
+	position: "start" | "end";
+}
+
+const SelectorInput = ({ hour, info, position }: SelectorInputProps) => {
 	const [selectedHour, setSelectedHour] = useState(hour);
 	const setIsHourChanged = useSetRecoilState(hourChange);
-	const rangeInputList = useRecoilValue(hourState);
-	const setTemporaryHours = useSetRecoilState(temporaryHourState);
+	const [temporaryHours, setTemporaryHours] =
+		useRecoilState(temporaryHourState);
+	const setCurrentInputState = useSetRecoilState(currentInputState);
+	const [isInputSelected, setIsInputSelected] = useState(false);
 
-	const handleSelectHour = (e: any) => {
-		setSelectedHour(e.target.id);
+	useEffect(() => {
+		setSelectedHour(hour);
+	}, [hour]);
+
+	/**
+	 * 시간을 선택하면, temporaryHourState를 업데이트합니다.
+	 * @param e
+	 */
+	const handleSelectHour = (e: React.MouseEvent<HTMLLIElement>) => {
+		setSelectedHour(e.currentTarget.id);
 		setIsInputSelected(!isInputSelected);
 		setIsHourChanged(true);
 
-		const targetObjIdx = rangeInputList.findIndex(
+		// 요일 인덱스
+		const targetObjIdx = temporaryHours.findIndex(
 			(item: any) => item.id === info[0]
 		);
 
+		// range input의 인덱스
 		const targetIdx = info[1];
 
-		let newArray = [...rangeInputList];
-		let newList = [...rangeInputList[targetObjIdx].list];
+		let newArray = [...temporaryHours];
+		let newList = [...temporaryHours[targetObjIdx].list];
 		newList[targetIdx] =
 			position === "start"
 				? {
-						start: e.target.id,
+						start: e.currentTarget.id,
 						end: newList[targetIdx].end,
 				  }
 				: {
 						start: newList[targetIdx].start,
-						end: e.target.id,
+						end: e.currentTarget.id,
 				  };
 
 		newArray[targetObjIdx] = {
@@ -41,6 +66,14 @@ const SelectorInput = ({ hour, info, position }: any) => {
 			name: info[2],
 			list: newList,
 		};
+
+		setCurrentInputState({
+			targetObj: info[0],
+			targetObjIdx,
+			targetIdx,
+			position,
+		});
+
 		setTemporaryHours(newArray);
 	};
 
@@ -112,10 +145,10 @@ const SelectList = styled.ul`
 	height: 20rem;
 	padding: 1rem;
 	background-color: white;
-	box-shadow: 5px 5px 5px lightgray;
+	box-shadow: 5px 5px 5px ${({ theme }) => theme.colors.lightgray};
 	overflow: scroll;
 	z-index: 999;
-	border: 0.5px solid #f7f7f7;
+	border: 0.5px solid ${({ theme }) => theme.colors.lightgray};
 	border-radius: 0.5rem;
 
 	li {
@@ -125,7 +158,7 @@ const SelectList = styled.ul`
 		cursor: pointer;
 
 		&:hover {
-			background-color: lightgray;
+			background-color: ${({ theme }) => theme.colors.lightgray};
 		}
 	}
 `;
