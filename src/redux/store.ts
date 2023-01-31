@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import hourChangeReducer from "./counter/hourChangeReducer";
 
 const store = configureStore({
-	reducer: {},
+	reducer: {
+		hourChange: hourChangeReducer,
+	},
 });
 
 export default store;

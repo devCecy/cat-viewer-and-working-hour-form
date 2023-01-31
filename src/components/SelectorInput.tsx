@@ -4,14 +4,14 @@ import { hours } from "../data/hours";
 
 // recoil
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-	currentInputState,
-	hourChange,
-	temporaryHourState,
-} from "../atoms/hours";
+import { currentInputState, temporaryHourState } from "../atoms/hours";
 
 // library
 import { IoMdArrowDropdown } from "react-icons/io";
+
+// redux
+import { useDispatch } from "react-redux";
+import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
 
 interface SelectorInputProps {
 	hour: string;
@@ -20,8 +20,9 @@ interface SelectorInputProps {
 }
 
 const SelectorInput = ({ hour, info, position }: SelectorInputProps) => {
+	const dispatch = useDispatch();
+
 	const [selectedHour, setSelectedHour] = useState(hour);
-	const setIsHourChanged = useSetRecoilState(hourChange);
 	const [temporaryHours, setTemporaryHours] =
 		useRecoilState(temporaryHourState);
 	const setCurrentInputState = useSetRecoilState(currentInputState);
@@ -38,7 +39,8 @@ const SelectorInput = ({ hour, info, position }: SelectorInputProps) => {
 	const handleSelectHour = (e: React.MouseEvent<HTMLLIElement>) => {
 		setSelectedHour(e.currentTarget.id);
 		setIsInputSelected(!isInputSelected);
-		setIsHourChanged(true);
+
+		dispatch(changeHourSaveState());
 
 		// 요일 인덱스
 		const targetObjIdx = temporaryHours.findIndex(

@@ -4,7 +4,6 @@ import styled from "styled-components";
 // recoil
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-	hourChange,
 	hourState,
 	isTemporaryHourValidState,
 	temporaryHourState,
@@ -18,9 +17,18 @@ import { BiTrash } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
+
 const WorkingHours = () => {
+	const isHourChanged = useSelector(
+		(state: any) => state.hourChange.isHourChanged
+	);
+	const dispatch = useDispatch();
+
 	const [rangeInputList, setRangeInputList] = useRecoilState(hourState);
-	const [isHourChanged, setIsHourChanged] = useRecoilState(hourChange);
+	// const [isHourChanged, setIsHourChanged] = useRecoilState(hourChange);
 	const [temporaryHours, setTemporaryHours] =
 		useRecoilState(temporaryHourState);
 	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
@@ -57,7 +65,8 @@ const WorkingHours = () => {
 			list: newList,
 		};
 		setTemporaryHours([...newArray]);
-		setIsHourChanged(true);
+
+		dispatch(changeHourSaveState());
 	};
 
 	/**
@@ -89,7 +98,8 @@ const WorkingHours = () => {
 		};
 
 		setTemporaryHours([...newArray]);
-		setIsHourChanged(true);
+
+		dispatch(changeHourSaveState());
 	};
 
 	/**
