@@ -26,15 +26,15 @@ const root = ReactDOM.createRoot(
 root.render(
 	<React.StrictMode>
 		<ThemeProvider theme={theme}>
-			<PersistGate loading={null} persistor={persistor}>
-				<Provider store={store}>
+			<Provider store={store}>
+				<PersistGate loading={null} persistor={persistor}>
 					<RecoilRoot>
 						<QueryClientProvider client={queryClient}>
 							<App />
 						</QueryClientProvider>
 					</RecoilRoot>
-				</Provider>
-			</PersistGate>
+				</PersistGate>
+			</Provider>
 		</ThemeProvider>
 		<GlobalStyle />
 	</React.StrictMode>
