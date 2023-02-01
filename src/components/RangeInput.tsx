@@ -1,12 +1,9 @@
 import styled from "styled-components";
 
-// recoil
-import { useRecoilValue } from "recoil";
-import { isTemporaryHourValidState } from "../atoms/hours";
-
 // components
 import SelectorInput from "./SelectorInput";
 import { useSelector } from "react-redux";
+import useCheckHourValid from "../hooks/useCheckHourValid";
 
 interface RangeInputProps {
 	hourList: { start: string; end: string };
@@ -14,7 +11,7 @@ interface RangeInputProps {
 }
 
 const RangeInput = ({ hourList, info }: RangeInputProps) => {
-	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
+	const isHourValid = useCheckHourValid();
 	const currentInput = useSelector(
 		(state: any) => state.currentInputState.currentInput
 	);
@@ -31,7 +28,7 @@ const RangeInput = ({ hourList, info }: RangeInputProps) => {
 				{/* 시간 유효성 */}
 				{currentInput.targetObj === info[0] &&
 					currentInput.targetIdx === info[1] && (
-						<span>{!isTemporaryHourValid && "시간을 다시 확인해주세요!"}</span>
+						<span>{!isHourValid && "시간을 다시 확인해주세요!"}</span>
 					)}
 			</FlexColumBox>
 		</Container>

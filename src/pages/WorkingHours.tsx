@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
-// recoil
-import { useRecoilValue } from "recoil";
-import { isTemporaryHourValidState } from "../atoms/hours";
+import useCheckHourValid from "../hooks/useCheckHourValid";
 
 // components
 import RangeInput from "../components/RangeInput";
@@ -21,6 +18,7 @@ import { setTemporaryHours } from "../redux/reducer/temporaryHoursReducer";
 
 const WorkingHours = () => {
 	const dispatch = useDispatch();
+	const isHourValid = useCheckHourValid();
 	const isHourChanged = useSelector(
 		(state: any) => state.hourChange.isHourChanged
 	);
@@ -28,9 +26,6 @@ const WorkingHours = () => {
 	const temporaryHours = useSelector(
 		(state: any) => state.temporaryHours.temporaryHours
 	);
-
-	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
-
 	const [sectionCollapse, setSectionCollapse] = useState(false);
 
 	useEffect(() => {
@@ -190,8 +185,8 @@ const WorkingHours = () => {
 								Cancel
 							</Button>
 							<Button
-								disabled={!isTemporaryHourValid}
-								props={!isTemporaryHourValid ? "error" : "main"}
+								disabled={!isHourValid}
+								props={!isHourValid ? "error" : "main"}
 								onClick={handleUpdate}
 							>
 								Update
