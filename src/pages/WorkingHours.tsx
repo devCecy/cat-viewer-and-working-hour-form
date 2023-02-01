@@ -3,11 +3,7 @@ import styled from "styled-components";
 
 // recoil
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-	hourState,
-	isTemporaryHourValidState,
-	temporaryHourState,
-} from "../atoms/hours";
+import { isTemporaryHourValidState, temporaryHourState } from "../atoms/hours";
 
 // components
 import RangeInput from "../components/RangeInput";
@@ -20,15 +16,15 @@ import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
+import { setHours } from "../redux/counter/hoursReducer";
 
 const WorkingHours = () => {
+	const dispatch = useDispatch();
 	const isHourChanged = useSelector(
 		(state: any) => state.hourChange.isHourChanged
 	);
-	const dispatch = useDispatch();
+	const hourList = useSelector((state: any) => state.hours.hourList);
 
-	const [rangeInputList, setRangeInputList] = useRecoilState(hourState);
-	// const [isHourChanged, setIsHourChanged] = useRecoilState(hourChange);
 	const [temporaryHours, setTemporaryHours] =
 		useRecoilState(temporaryHourState);
 	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
@@ -36,9 +32,9 @@ const WorkingHours = () => {
 	const [sectionCollapse, setSectionCollapse] = useState(false);
 
 	useEffect(() => {
-		setTemporaryHours(rangeInputList);
+		setTemporaryHours(hourList);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rangeInputList]);
+	}, [hourList]);
 
 	/**
 	 * Range Input을 추가합니다.
@@ -98,7 +94,6 @@ const WorkingHours = () => {
 		};
 
 		setTemporaryHours([...newArray]);
-
 		dispatch(changeHourSaveState());
 	};
 
@@ -106,7 +101,7 @@ const WorkingHours = () => {
 	 * 변경된 시간을 업데이트 합니다.
 	 */
 	const handleUpdate = () => {
-		setRangeInputList(temporaryHours);
+		dispatch(setHours(temporaryHours));
 		window.location.replace("/working-hour");
 	};
 
