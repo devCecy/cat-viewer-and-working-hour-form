@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // recoil
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isTemporaryHourValidState, temporaryHourState } from "../atoms/hours";
+import { useRecoilValue } from "recoil";
+import { isTemporaryHourValidState } from "../atoms/hours";
 
 // components
 import RangeInput from "../components/RangeInput";
@@ -17,6 +17,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
 import { setHours } from "../redux/counter/hoursReducer";
+import { setTemporaryHours } from "../redux/counter/temporaryHoursReducer";
 
 const WorkingHours = () => {
 	const dispatch = useDispatch();
@@ -24,15 +25,16 @@ const WorkingHours = () => {
 		(state: any) => state.hourChange.isHourChanged
 	);
 	const hourList = useSelector((state: any) => state.hours.hourList);
+	const temporaryHours = useSelector(
+		(state: any) => state.temporaryHours.temporaryHours
+	);
 
-	const [temporaryHours, setTemporaryHours] =
-		useRecoilState(temporaryHourState);
 	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
 
 	const [sectionCollapse, setSectionCollapse] = useState(false);
 
 	useEffect(() => {
-		setTemporaryHours(hourList);
+		dispatch(setTemporaryHours(hourList));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hourList]);
 
@@ -60,8 +62,7 @@ const WorkingHours = () => {
 			name,
 			list: newList,
 		};
-		setTemporaryHours([...newArray]);
-
+		dispatch(setTemporaryHours([...newArray]));
 		dispatch(changeHourSaveState());
 	};
 
@@ -93,7 +94,7 @@ const WorkingHours = () => {
 			list: newList,
 		};
 
-		setTemporaryHours([...newArray]);
+		dispatch(setTemporaryHours([...newArray]));
 		dispatch(changeHourSaveState());
 	};
 
