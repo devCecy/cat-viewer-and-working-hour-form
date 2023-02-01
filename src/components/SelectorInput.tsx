@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { hours } from "../data/hours";
 
-// recoil
-import { useSetRecoilState } from "recoil";
-import { currentInputState } from "../atoms/hours";
-
 // library
 import { IoMdArrowDropdown } from "react-icons/io";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
-import { setTemporaryHours } from "../redux/counter/temporaryHoursReducer";
+import { changeHourSaveState } from "../redux/reducer/hourChangeReducer";
+import { setTemporaryHours } from "../redux/reducer/temporaryHoursReducer";
+import { setCurrentInputState } from "../redux/reducer/currentInputReducer";
 
 interface SelectorInputProps {
 	hour: string;
@@ -26,7 +23,6 @@ const SelectorInput = ({ hour, info, position }: SelectorInputProps) => {
 		(state: any) => state.temporaryHours.temporaryHours
 	);
 
-	const setCurrentInputState = useSetRecoilState(currentInputState);
 	const [selectedHour, setSelectedHour] = useState(hour);
 	const [isInputSelected, setIsInputSelected] = useState(false);
 
@@ -71,12 +67,14 @@ const SelectorInput = ({ hour, info, position }: SelectorInputProps) => {
 			list: newList,
 		};
 
-		setCurrentInputState({
-			targetObj: info[0],
-			targetObjIdx,
-			targetIdx,
-			position,
-		});
+		dispatch(
+			setCurrentInputState({
+				targetObj: info[0],
+				targetObjIdx,
+				targetIdx,
+				position,
+			})
+		);
 
 		dispatch(setTemporaryHours(newArray));
 	};

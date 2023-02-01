@@ -1,10 +1,11 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import hourChangeReducer from "./counter/hourChangeReducer";
-import hoursReducer from "./counter/hoursReducer";
+import hourChangeReducer from "./reducer/hourChangeReducer";
+import hoursReducer from "./reducer/hoursReducer";
 
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import temporaryHoursReducer from "./counter/temporaryHoursReducer";
+import temporaryHoursReducer from "./reducer/temporaryHoursReducer";
+import currentInputReducer from "./reducer/currentInputReducer";
 
 const persistConfig = {
 	key: "hours",
@@ -16,6 +17,7 @@ const store = configureStore({
 		hours: persistReducer(persistConfig, hoursReducer),
 		temporaryHours: temporaryHoursReducer,
 		hourChange: hourChangeReducer,
+		currentInputState: currentInputReducer,
 	},
 	middleware: getDefaultMiddleware({
 		serializableCheck: false,

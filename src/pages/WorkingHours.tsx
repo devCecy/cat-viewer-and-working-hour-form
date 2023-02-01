@@ -15,9 +15,9 @@ import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeHourSaveState } from "../redux/counter/hourChangeReducer";
-import { setHours } from "../redux/counter/hoursReducer";
-import { setTemporaryHours } from "../redux/counter/temporaryHoursReducer";
+import { changeHourSaveState } from "../redux/reducer/hourChangeReducer";
+import { setHours } from "../redux/reducer/hoursReducer";
+import { setTemporaryHours } from "../redux/reducer/temporaryHoursReducer";
 
 const WorkingHours = () => {
 	const dispatch = useDispatch();

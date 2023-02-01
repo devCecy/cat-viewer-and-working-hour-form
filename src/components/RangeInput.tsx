@@ -2,10 +2,11 @@ import styled from "styled-components";
 
 // recoil
 import { useRecoilValue } from "recoil";
-import { currentInputState, isTemporaryHourValidState } from "../atoms/hours";
+import { isTemporaryHourValidState } from "../atoms/hours";
 
 // components
 import SelectorInput from "./SelectorInput";
+import { useSelector } from "react-redux";
 
 interface RangeInputProps {
 	hourList: { start: string; end: string };
@@ -14,7 +15,9 @@ interface RangeInputProps {
 
 const RangeInput = ({ hourList, info }: RangeInputProps) => {
 	const isTemporaryHourValid = useRecoilValue(isTemporaryHourValidState);
-	const currentInput = useRecoilValue(currentInputState);
+	const currentInput = useSelector(
+		(state: any) => state.currentInputState.currentInput
+	);
 
 	return (
 		<Container>
