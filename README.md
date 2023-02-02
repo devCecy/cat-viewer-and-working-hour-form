@@ -29,6 +29,7 @@ npm run start
 - recoil -> redux
 - axios / react-query
 - react-icon
+- react-masonry-css (masonry 형식)
 
 </br>
 
@@ -36,7 +37,8 @@ npm run start
 
 - 핀터레스트 형식으로 이미지가 보여집니다.
 - 30개의 이미지가 무한스크롤로 로드됩니다.
-- 이미지를 클릭한 상태로 있으면 이미지가 확대되고, 클릭을 끝내면 이미지가 원래 사이즈로 돌아옵니다.
+- 이미지를 클릭하면 애니메이션과 함께 확대됩니다.
+- 확대된 이미지를 클릭하면 이미지가 원래 사이즈로 돌아옵니다.
 - 반응형을 제공합니다.
 
 <img src="public/images/cat-viewer.png" width="500px">
@@ -59,3 +61,4 @@ npm run start
 ### 참고
 
 - [TheCatAPI](https://developers.thecatapi.com/view-account/ylX4blBYT9FaoVd6OhvR?report=bOoHBz-8t)
+- [getBoundingClientRect](https://developer.mozilla.org/ko/docs/Web/API/Element/getBoundingClientRect)
