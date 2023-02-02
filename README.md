@@ -26,7 +26,7 @@ npm run start
 
 - typescript
 - styled-components
-- recoil
+- recoil -> redux
 - axios / react-query
 - react-icon
 
